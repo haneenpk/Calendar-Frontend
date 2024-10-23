@@ -10,7 +10,6 @@ const ManagerSignUp: React.FC = () => {
   });
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -27,9 +26,9 @@ const ManagerSignUp: React.FC = () => {
     }
 
     try {
-      const response = await axios.post("/api/managers/signup", formData);
+      const response = await axios.post("/api/manager/signup", formData);
       if (response.status === 201) {
-        setSuccess("Manager account created successfully!");
+
         setFormData({ name: "", email: "", password: "", confirmPassword: "" });
       } else {
         setError("Error creating account.");
@@ -44,7 +43,6 @@ const ManagerSignUp: React.FC = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center">Manager Signup</h2>
         {error && <div className="p-2 text-red-600 border border-red-600 rounded">{error}</div>}
-        {success && <div className="p-2 text-green-600 border border-green-600 rounded">{success}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-group">
@@ -55,7 +53,7 @@ const ManagerSignUp: React.FC = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-2 mt-1 text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+              className="w-full px-3 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -67,7 +65,7 @@ const ManagerSignUp: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-2 mt-1 text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+              className="w-full px-3 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -79,7 +77,7 @@ const ManagerSignUp: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full p-2 mt-1 text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+              className="w-full px-3 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -91,13 +89,13 @@ const ManagerSignUp: React.FC = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="w-full p-2 mt-1 text-gray-900 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-500"
+              className="w-full px-3 py-2 mt-1 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full p-2 mt-4 font-semibold text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-500 focus:ring-2 focus:ring-indigo-400 rounded-md font-semibold transition duration-300"
           >
             Sign Up
           </button>

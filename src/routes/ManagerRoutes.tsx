@@ -1,40 +1,75 @@
-import { lazy } from "react";
+import React, { lazy, ReactElement } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/manager/Home";
-import Login from "../pages/manager/auth/ManagerSignUp";
-import ErrorPage from "../pages/ErrorPage";
 
+// const Profile = lazy(() => import("../pages/Users/Profile"));
+// const EditProfile = lazy(() => import("../pages/Users/EditProfile"));
+// const Upcoming = lazy(() => import("../pages/Users/Upcoming"));
+// const ShowTime = lazy(() => import("../pages/Users/ShowTime"));
+// const ShowSeats = lazy(() => import("../pages/Users/ShowSeats"));
+// const ShowCheckout = lazy(() => import("../pages/Users/ShowCheckout"));
+// const Chat = lazy(() => import("../pages/Users/Chat"));
+// const BookingSuccess = lazy(() => import("../pages/Users/BookingSuccess"));
+// const BookingHistory = lazy(() => import("../pages/Users/BookingHistory"));
+// const Wallet = lazy(() => import("../pages/Users/Wallet"));
 
-// Interface for route definition
-interface RouteProps {
-  path: string;
-  element: React.ReactElement | React.FunctionComponent<any> | null;
-}
+import Login from "../pages/common/Login";
+import SignUp from "../pages/manager/auth/ManagerSignUp";
+import OTP from "../pages/manager/auth/Otp";
+import ErrorPage from "../pages/common/ErrorPage";
 
+// Define props type for UserRoutes
 interface ManagerRoutesProps {
   isLoggedIn: boolean;
 }
 
-const ManagerRoutes = ({ isLoggedIn }: ManagerRoutesProps) => {
+// Define a route config interface
+interface RouteConfig {
+  path: string;
+  element: ReactElement;
+}
 
-  const navigateToLogin = () => <Navigate to="/manager/login" />;
-  const navigateHome = () => <Navigate to="/manager" />;
+// Convert the component to TypeScript
+const ManagerRoutes: React.FC<ManagerRoutesProps> = ({ isLoggedIn }) => {
 
-  const routes: RouteProps[] = [
+  const navigateToLogin = (): ReactElement => <Navigate to="/manager/login" />;
+  const navigateToHome = (): ReactElement => <Navigate to="/manager" />;
+
+  // Define protected routes array with proper typing
+  const protectedRoutes: RouteConfig[] = [
     { path: "/", element: isLoggedIn ? <Home /> : navigateToLogin() },
+    { path: "/home", element: isLoggedIn ? <Home /> : navigateToLogin() },
+    // { path: "/show", element: isLoggedIn ? <Home decide={"show"} /> : navigateToLogin() },
+    // { path: "/profile", element: isLoggedIn ? <Profile /> : navigateToLogin() },
+    // { path: "/edit-profile", element: isLoggedIn ? <EditProfile /> : navigateToLogin() },
+    // { path: "/upcoming", element: isLoggedIn ? <Upcoming /> : navigateToLogin() },
+    // { path: "/available", element: isLoggedIn ? <ShowTime /> : navigateToLogin() },
+    // { path: "/show/seats", element: isLoggedIn ? <ShowSeats /> : navigateToLogin() },
+    // { path: "/show/checkout", element: isLoggedIn ? <ShowCheckout /> : navigateToLogin() },
+    // { path: "/chat", element: isLoggedIn ? <Chat /> : navigateToLogin() },
+    // { path: "/booking/success", element: isLoggedIn ? <BookingSuccess /> : navigateToLogin() },
+    // { path: "/booking/cancel", element: isLoggedIn ? <Chat /> : navigateToLogin() },
+    // { path: "/booking-history", element: isLoggedIn ? <BookingHistory /> : navigateToLogin() },
+    // { path: "/wallet", element: isLoggedIn ? <Wallet /> : navigateToLogin() },
+  ];
 
-
-    // Auth Route
-    { path: "/login", element: !isLoggedIn ? <Login /> : navigateHome() },
-    // Error Page
-    { path: "/*", element: <ErrorPage /> },
+  // Define auth routes array with proper typing
+  const authRoutes: RouteConfig[] = [
+    { path: "/login", element: !isLoggedIn ? <Login role="manager" /> : navigateToHome() },
+    { path: "/sign-up", element: !isLoggedIn ? <SignUp /> : navigateToHome() },
+    { path: "/verify-otp", element: !isLoggedIn ? <OTP /> : navigateToHome() },
   ];
 
   return (
     <Routes>
-      {routes.map((route, index) => (
-        <Route key={index} path={route.path} element={route.element} />
+      {protectedRoutes.map(({ path, element }) => (
+        <Route key={path} path={path} element={element} />
       ))}
+      {authRoutes.map(({ path, element }) => (
+        <Route key={path} path={path} element={element} />
+      ))}
+      {/* Error Page */}
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };
